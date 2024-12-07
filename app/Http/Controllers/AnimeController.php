@@ -201,6 +201,19 @@ class AnimeController extends Controller
 
         return response()->json(['message' => 'Аниме успешно обновлено.', 'anime' => $anime], 200);
     }
+    public function getGenre($anime_id)
+    {
+        // Проверка существования аниме
+        $anime = Anime::find($anime_id);
+        if (!$anime) {
+            return response()->json(['message' => 'Аниме не найдено'], 404);
+        }
+        // Получение жанров через связь
+        $genres = $anime->genre()->get([]);
+        return response()->json([
+            'genre' => $anime->genre ? $anime->genre->pluck('name') : [], // Получаем жанры
+        ], 200);
+    }
     private function applyFilters($query, $request)
     {
         if ($request->filled('genre')) {

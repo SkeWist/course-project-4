@@ -30,6 +30,7 @@ Route::get('/anime_types', [AnimeTypeController::class, 'index']);
 Route::get('/anime/year/{year}', [AnimeController::class, 'getAnimeByYear']);
 Route::get('/anime/search', [AnimeController::class, 'searchAnime'])->name('anime.search');
 Route::get('/anime/{id}/gallery', [AnimeController::class, 'getGalleryImages']);
+Route::get('/anime/{id}/genre', [AnimeController::class, 'getGenre']);
 
 // Дополнительные ресурсы
 Route::get('/genres', [GenreController::class, 'index']);
