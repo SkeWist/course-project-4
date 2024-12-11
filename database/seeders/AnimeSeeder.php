@@ -42,7 +42,7 @@ class AnimeSeeder extends Seeder
                 'episode_count' => 366,
                 'rating' => 8.1,
                 'release_year' => 2004,
-                'image_url' => '/anime_images/Bleach.jpg',
+                'image_url' => '/anime_images/Bleach.png',
             ],
             [
                 'title' => 'Ковбой Бибоп',
