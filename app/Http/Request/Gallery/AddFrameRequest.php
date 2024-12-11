@@ -7,6 +7,10 @@ use App\Http\Request\ApiRequest;
 
 class AddFrameRequest extends ApiRequest
 {
+    public function authorize(): bool
+    {
+        return true;
+    }
     public function rules(): array
     {
         return [

@@ -7,6 +7,11 @@ use Spatie\FlareClient\Api;
 
 class RegisterRequest extends ApiRequest
 {
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     public function rules(): array
     {
         return [

@@ -6,6 +6,11 @@ use App\Http\Request\ApiRequest;
 
 class DeleteAnimeRequest extends ApiRequest
 {
+    public function authorize(): bool
+    {
+        return true;
+    }
+
     public function rules()
     {
         return [
