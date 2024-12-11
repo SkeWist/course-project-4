@@ -14,7 +14,7 @@ class ShowAnimeRequest extends FormRequest
     public function rules()
     {
         return [
-            'animeId' => 'required|integer|exists:anime,id', // Проверяем, что animeId существует в таблице anime
+            'animeId' => 'required|integer|exists:animes,id', // Проверяем, что animeId существует в таблице anime
         ];
     }
 

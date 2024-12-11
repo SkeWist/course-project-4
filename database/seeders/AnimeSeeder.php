@@ -10,7 +10,7 @@ class AnimeSeeder extends Seeder
     public function run()
     {
         // Вставка данных в таблицу "anime"
-        DB::table('anime')->insert([
+        DB::table('animes')->insert([
             [
                 'title' => 'Афросамурай',
                 'studio_id' => 17,
@@ -223,7 +223,7 @@ class AnimeSeeder extends Seeder
         ]);
 
         // Вставка данных в таблицу "anime_genre" (связь многие ко многим)
-        DB::table('anime_genre')->insert([
+        DB::table('anime_genres')->insert([
             [
                 'anime_id' => 1,
                 'genre_id' => 2,

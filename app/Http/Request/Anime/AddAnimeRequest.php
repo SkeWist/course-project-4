@@ -16,9 +16,9 @@ class AddAnimeRequest extends ApiRequest
         return [
             'title' => 'required|string|min:3|max:255',
             'description' => 'required|string',
-            'studio_id' => 'required|exists:studio,id',
-            'age_rating_id' => 'required|exists:age_rating,id',
-            'anime_type_id' => 'nullable|exists:anime_type,id',
+            'studio_id' => 'required|exists:studios,id',
+            'age_rating_id' => 'required|exists:age_ratings,id',
+            'anime_type_id' => 'nullable|exists:anime_types,id',
             'episode_count' => 'required|integer|min:1',
             'rating' => 'required|numeric|min:0|max:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

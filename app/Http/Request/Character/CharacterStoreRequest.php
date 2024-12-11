@@ -17,7 +17,7 @@ class CharacterStoreRequest extends FormRequest
             'name'        => 'required|string|max:255',
             'voice_actor' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'anime_id'    => 'required|exists:anime,id',
+            'anime_id'    => 'required|exists:animes,id',
             'audio'       => 'nullable|mimes:mp3,wav|max:5120', // Только mp3/wav файлы до 5 МБ
         ];
     }

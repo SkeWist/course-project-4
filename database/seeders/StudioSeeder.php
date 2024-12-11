@@ -31,7 +31,7 @@ class StudioSeeder extends Seeder
             ];
 
         foreach ($studios as $studio) {
-            DB::table('studio')->insert([
+            DB::table('studios')->insert([
                 'name' => $studio,
                 'created_at' => now(),
                 'updated_at' => now(),

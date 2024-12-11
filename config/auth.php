@@ -36,6 +36,10 @@ return [
     */
 
     'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
         'api' => [
             'driver' => 'token', // Или другой драйвер для API, например 'token', 'sanctum' и т. д.
             'provider' => 'users',  // Это зависит от вашей модели пользователя

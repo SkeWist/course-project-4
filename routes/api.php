@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\RandomAnime;
+use App\Http\Middleware\CheckRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -19,7 +20,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 // Пользовательские данные
-Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'getUser']);
+Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
 Route::middleware('auth:sanctum')->post('/user/profile', [UserController::class, 'updateProfile']);
 
 // Аниме
@@ -38,7 +39,7 @@ Route::get('/studios', [StudioController::class, 'index']);
 Route::get('/age_ratings', [AgeRatingController::class, 'index']);
 
 // Администрирование (требуется аутентификация)
-Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
+Route::prefix('admin')->middleware(['auth:api', CheckRole::class . ':admin'])->group(function () {
     // Управление аниме
     Route::post('/anime', [AnimeController::class, 'addAnime']);
     Route::post('/anime/{animeId}', [AnimeController::class, 'editAnime']);

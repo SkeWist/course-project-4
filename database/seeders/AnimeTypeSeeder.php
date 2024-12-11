@@ -9,7 +9,7 @@ class AnimeTypeSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('anime_type')->insert([
+        DB::table('anime_types')->insert([
             ['name' => 'Фильм'],
             ['name' => 'Сериал'],
             ['name' => 'OVA'],

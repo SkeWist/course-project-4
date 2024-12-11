@@ -20,7 +20,7 @@ class GenreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:genre,name', // Название жанра должно быть уникальным
+            'name' => 'required|string|max:255|unique:genres,name', // Название жанра должно быть уникальным
         ];
     }
 

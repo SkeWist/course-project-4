@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AgeRating;
+use App\Http\Request\AgeRating\AgeRatingRequest;
 use Illuminate\Http\Request;
 
 class AgeRatingController extends Controller
@@ -12,21 +13,18 @@ class AgeRatingController extends Controller
         $ratings = AgeRating::all();
         return response()->json($ratings, 200);
     }
+
     public function show($id) // Получение возрастного рейтинга по ID
     {
         $rating = AgeRating::findOrFail($id);
         return response()->json($rating, 200);
     }
-    public function createAgeRating(Request $request)
-    {
-        // Валидация входящих данных
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:age_rating,name', // Название должно быть уникальным
-        ]);
 
+    public function createAgeRating(AgeRatingRequest $request)
+    {
         // Создание нового возрастного рейтинга
         $ageRating = AgeRating::create([
-            'name' => $validatedData['name'],
+            'name' => $request->validated()['name'],
         ]);
 
         // Возвращаем успешный ответ с данными нового рейтинга
@@ -35,13 +33,9 @@ class AgeRatingController extends Controller
             'age_rating' => $ageRating,
         ], 201);
     }
-    public function updateAgeRating(Request $request, $id)
-    {
-        // Валидация входящих данных
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:age_rating,name,' . $id, // Уникальное имя, исключая текущий ID
-        ]);
 
+    public function updateAgeRating(AgeRatingRequest $request, $id)
+    {
         // Поиск возрастного рейтинга по ID
         $ageRating = AgeRating::find($id);
 
@@ -53,7 +47,7 @@ class AgeRatingController extends Controller
         }
 
         // Обновление имени возрастного рейтинга
-        $ageRating->name = $validatedData['name'];
+        $ageRating->name = $request->validated()['name'];
 
         // Сохранение изменений
         $ageRating->save();
@@ -64,6 +58,7 @@ class AgeRatingController extends Controller
             'age_rating' => $ageRating,
         ], 200);
     }
+
     public function deleteAgeRating($id)
     {
         // Поиск возрастного рейтинга по ID

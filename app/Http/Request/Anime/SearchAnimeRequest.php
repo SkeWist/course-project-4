@@ -21,10 +21,10 @@ class SearchAnimeRequest extends FormRequest
     {
         return [
             'keyword' => 'nullable|string|max:255', // Ключевое слово
-            'genre' => 'nullable|exists:genre,name', // Жанр должен существовать в таблице genres
-            'studio' => 'nullable|exists:studio,name', // Студия должна существовать в таблице studios
-            'age_rating' => 'nullable|exists:age_rating,name', // Возрастной рейтинг должен существовать
-            'anime_type' => 'nullable|exists:anime_type,name', // Тип аниме должен существовать
+            'genre' => 'nullable|exists:genres,name', // Жанр должен существовать в таблице genres
+            'studio' => 'nullable|exists:studios,name', // Студия должна существовать в таблице studios
+            'age_rating' => 'nullable|exists:age_ratings,name', // Возрастной рейтинг должен существовать
+            'anime_type' => 'nullable|exists:anime_types,name', // Тип аниме должен существовать
         ];
     }
 

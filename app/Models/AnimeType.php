@@ -10,7 +10,7 @@ class AnimeType extends Model
     use HasFactory;
 
     // Указываем, что модель работает с таблицей anime_types
-    protected $table = 'anime_type';
+    protected $table = 'anime_types';
 
     // Указываем, какие поля можно массово заполнять
     protected $fillable = ['name'];

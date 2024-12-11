@@ -10,7 +10,7 @@ class Gallery extends Model
     use HasFactory;
 
     // Убедитесь, что имя таблицы указано правильно
-    protected $table = 'gallery'; // Если таблица называется gallery (в единственном числе)
+    protected $table = 'galleries'; // Если таблица называется gallery (в единственном числе)
 
     // Укажите поля, которые можно массово заполнять
     protected $fillable = [

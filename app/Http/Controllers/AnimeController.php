@@ -9,6 +9,7 @@ use App\Http\Request\Anime\DeleteAnimeRequest;
 use App\Http\Request\Anime\ShowAnimeRequest;
 use App\Http\Request\Anime\UpdateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
+use App\Http\Controllers\AuthController;
 use App\Models\Anime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -36,7 +37,7 @@ class AnimeController extends Controller
     public function show($animeId)
     {
         try {
-            $anime = Anime::with(['studio', 'ageRating', 'genre', 'animeType', 'character'])->findOrFail($animeId);
+            $anime = Anime::with(['studio', 'ageRating', 'genre', 'animeType', 'characters'])->findOrFail($animeId);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json([
                 'error' => 'Аниме с таким идентификатором не найдено.',
@@ -55,7 +56,7 @@ class AnimeController extends Controller
                 'age_rating' => $anime->ageRating?->name ?? 'Не указано',
                 'anime_type' => $anime->animeType?->name ?? 'Не указано',
                 'episode_count' => $anime->episode_count,
-                'character' => $anime->character->map(function ($character) {
+                'character' => $anime->characters->map(function ($character) {
                     return [
                         'name' => $character->name, // Имя персонажа
                         'voice_actor' => $character->voice_actor,
@@ -135,28 +136,28 @@ class AnimeController extends Controller
 
         // Фильтрация по жанру
         if ($genre) {
-            $query->whereHas('genre', function ($q) use ($genre) {
+            $query->whereHas('genres', function ($q) use ($genre) {
                 $q->where('name', $genre);
             });
         }
 
         // Фильтрация по студии
         if ($studio) {
-            $query->whereHas('studio', function ($q) use ($studio) {
+            $query->whereHas('studios', function ($q) use ($studio) {
                 $q->where('name', $studio);
             });
         }
 
         // Фильтрация по возрастному рейтингу
         if ($ageRating) {
-            $query->whereHas('ageRating', function ($q) use ($ageRating) {
+            $query->whereHas('ageRatings', function ($q) use ($ageRating) {
                 $q->where('name', $ageRating);
             });
         }
 
         // Фильтрация по типу аниме (по name)
         if ($animeType) {
-            $query->whereHas('animeType', function ($q) use ($animeType) {
+            $query->whereHas('animeTypes', function ($q) use ($animeType) {
                 $q->where('name', $animeType);  // точное совпадение имени
             });
         }
@@ -217,19 +218,19 @@ class AnimeController extends Controller
     private function applyFilters($query, $request)
     {
         if ($request->filled('genre')) {
-            $query->whereHas('genre', fn($q) => $q->where('name', $request->input('genre')));
+            $query->whereHas('genres', fn($q) => $q->where('name', $request->input('genre')));
         }
 
         if ($request->filled('studio')) {
-            $query->whereHas('studio', fn($q) => $q->where('name', $request->input('studio')));
+            $query->whereHas('studios', fn($q) => $q->where('name', $request->input('studio')));
         }
 
         if ($request->filled('age_rating')) {
-            $query->whereHas('ageRating', fn($q) => $q->where('name', $request->input('age_rating')));
+            $query->whereHas('ageRatings', fn($q) => $q->where('name', $request->input('age_rating')));
         }
         // Фильтрация по типу аниме
         if ($request->filled('anime_type')) {
-            $query->whereHas('animeType', fn($q) => $q->where('name', $request->input('anime_type')));
+            $query->whereHas('animeTypes', fn($q) => $q->where('name', $request->input('anime_type')));
         }
     }
 }

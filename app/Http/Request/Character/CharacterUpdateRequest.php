@@ -17,7 +17,7 @@ class CharacterUpdateRequest extends FormRequest
             'name'        => 'required|string|max:255',
             'voice_actor' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'anime_id'    => 'required|exists:anime,id',
+            'anime_id'    => 'required|exists:animes,id',
             'audio_path'  => 'nullable|string', // Добавлено для аудиодорожек
         ];
     }

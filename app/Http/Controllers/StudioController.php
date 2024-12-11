@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Studio;
+use App\Http\Request\Studio\StudioRequest;
 use Illuminate\Http\Request;
 
 class StudioController extends Controller
@@ -19,16 +20,11 @@ class StudioController extends Controller
         return response()->json($studio, 200);
     }
 
-    public function createStudio(Request $request)
+    public function createStudio(StudioRequest $request)
     {
-        // Валидация входных данных
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:studio,name', // Название обязательно, уникально и длиной до 255 символов
-        ]);
-
         // Создание новой студии
         $studio = Studio::create([
-            'name' => $validatedData['name'],
+            'name' => $request->validated()['name'],
         ]);
 
         // Возвращаем успешный ответ с информацией о новой студии
@@ -38,13 +34,8 @@ class StudioController extends Controller
         ], 201);
     }
 
-    public function updateStudio(Request $request, $id)
+    public function updateStudio(StudioRequest $request, $id)
     {
-        // Валидация входных данных
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255|unique:studio,name,' . $id, // Название обязательно, уникально (исключая текущую запись), длиной до 255 символов
-        ]);
-
         // Поиск студии по ID
         $studio = Studio::find($id);
 
@@ -56,7 +47,7 @@ class StudioController extends Controller
         }
 
         // Обновление названия студии
-        $studio->name = $validatedData['name'];
+        $studio->name = $request->validated()['name'];
 
         // Сохранение изменений
         $studio->save();
@@ -67,6 +58,7 @@ class StudioController extends Controller
             'studio' => $studio,
         ], 200);
     }
+
     public function deleteStudio($id)
     {
         // Поиск студии по ID
@@ -87,6 +79,4 @@ class StudioController extends Controller
             'message' => 'Студия успешно удалена.',
         ], 200);
     }
-
 }
-

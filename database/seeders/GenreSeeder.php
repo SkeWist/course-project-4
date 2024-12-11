@@ -41,7 +41,7 @@ class GenreSeeder extends Seeder
             ];
 
         foreach ($genres as $genre) {
-            DB::table('genre')->insert([
+            DB::table('genres')->insert([
                 'name' => $genre,
                 'created_at' => now(),
                 'updated_at' => now(),

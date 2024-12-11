@@ -14,7 +14,7 @@ class DeleteAnimeRequest extends ApiRequest
     public function rules()
     {
         return [
-            'anime_id' => 'required|exists:anime,id',
+            'anime_id' => 'required|exists:animes,id',
         ];
     }
 

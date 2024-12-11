@@ -15,9 +15,9 @@ class UpdateAnimeRequest extends ApiRequest
         return [
             'title' => 'sometimes|string|min:3|max:255',
             'description' => 'sometimes|string',
-            'studio_id' => 'sometimes|exists:studio,id',
-            'age_rating_id' => 'sometimes|exists:age_rating,id',
-            'anime_type_id' => 'nullable|exists:anime_type,id',
+            'studio_id' => 'sometimes|exists:studios,id',
+            'age_rating_id' => 'sometimes|exists:age_ratings,id',
+            'anime_type_id' => 'nullable|exists:anime_types,id',
             'episode_count' => 'sometimes|integer|min:1',
             'rating' => 'sometimes|numeric|min:0|max:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('anime', function (Blueprint $table) {
+        Schema::create('animes', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->foreignId('studio_id')->constrained("studio");
-            $table->foreignId('age_rating_id')->constrained("age_rating");
-            $table->foreignId('anime_type_id')->nullable()->constrained("anime_type");
+            $table->foreignId('studio_id')->constrained("studios");
+            $table->foreignId('age_rating_id')->constrained("age_ratings");
+            $table->foreignId('anime_type_id')->nullable()->constrained("anime_types");
             $table->integer('episode_count');
             $table->decimal('rating', 5, 2);
             $table->string('image_url')->nullable();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anime');
+        Schema::dropIfExists('animes');
     }
 };

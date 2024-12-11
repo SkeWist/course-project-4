@@ -6,18 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('anime_genre', function (Blueprint $table) {
+        Schema::create('age_ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('anime_id')->constrained('anime')->onDelete('cascade');
-            $table->foreignId('genre_id')->constrained('genre')->onDelete('cascade');
+            $table->string('name')->unique(); // Название возрастного рейтинга
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('anime_genre');
+        Schema::dropIfExists('age_ratings');
     }
 };

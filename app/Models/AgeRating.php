@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AgeRating extends Model
 {
     use HasFactory;
-    protected $table = 'age_rating';
+    protected $table = 'age_ratings';
     protected $fillable = ['name'];
 
     public function anime()

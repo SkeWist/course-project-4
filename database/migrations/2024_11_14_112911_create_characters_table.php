@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('character', function (Blueprint $table) {
+        Schema::create('characters', function (Blueprint $table) {
             $table->id(); // Автоматически создаст столбец id
             $table->string('name'); // Название персонажа
             $table->string('voice_actor'); // Актер озвучивания
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('anime_id'); // Внешний ключ anime_id
             $table->foreign('anime_id') // Определяем внешний ключ
             ->references('id')    // Поле, на которое ссылаемся
-            ->on('anime')         // Таблица, на которую ссылаемся
+            ->on('animes')         // Таблица, на которую ссылаемся
             ->onDelete('cascade'); // Удаляем персонажей при удалении аниме
             $table->string('image_path')->nullable();
             $table->string('audio_path')->nullable(); // Путь к аудио, может быть null
@@ -29,6 +29,6 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('character');
+        Schema::dropIfExists('characters');
     }
 };

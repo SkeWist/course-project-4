@@ -12,7 +12,7 @@ class Character extends Model
 
     protected $fillable = ['name', 'voice_actor', 'description', 'anime_id', 'audio_path', 'image_path'];
 
-    protected $table = 'character';
+    protected $table = 'characters';
 
     // Отношение персонажа к аниме через промежуточную таблицу anime_character
     public function anime()

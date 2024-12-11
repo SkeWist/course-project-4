@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('gallery', function (Blueprint $table) {
+        Schema::create('galleries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('anime_id'); // Ссылка на аниме
             $table->string('image_path'); // Путь к изображению
             $table->timestamps();
             // Добавляем внешний ключ, связывающий с таблицей аниме
-            $table->foreign('anime_id')->references('id')->on('anime')->onDelete('cascade');
+            $table->foreign('anime_id')->references('id')->on('animes')->onDelete('cascade');
         });
 
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('gallery');
+        Schema::dropIfExists('galleries');
     }
 };

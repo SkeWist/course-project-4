@@ -15,14 +15,14 @@ class Anime extends Model
         'episode_count', 'rating', 'image_url', 'release_year'
     ];
 
-    protected $table = 'anime'; // Явно указываем таблицу
+    protected $table = 'animes'; // Явно указываем таблицу
 
     /**
      * Связь с таблицей жанров (Many-to-Many).
      */
     public function genre()
     {
-        return $this->belongsToMany(Genre::class, 'anime_genre', 'anime_id', 'genre_id');
+        return $this->belongsToMany(Genre::class, 'anime_genres', 'anime_id', 'genre_id');
     }
 
     /**
@@ -53,12 +53,12 @@ class Anime extends Model
     /**
      * Связь с таблицей персонажей (One-to-Many).
      */
-    public function character()
+    public function characters()
     {
         return $this->hasMany(Character::class, 'anime_id');
     }
 
-    public function gallery()
+    public function galleries()
     {
         return $this->hasMany(Gallery::class);
     }

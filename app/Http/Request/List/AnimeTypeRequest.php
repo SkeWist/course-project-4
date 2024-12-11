@@ -20,7 +20,7 @@ class AnimeTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:anime_type,name', // Название типа должно быть уникальным
+            'name' => 'required|string|max:255|unique:anime_types,name', // Название типа должно быть уникальным
         ];
     }
 

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('surname');     // Фамилия
             $table->string('login')->unique();   // Логин, уникальный
             $table->string('password');    // Пароль
-            $table->foreignId('role_id')->constrained('role'); // Внешний ключ для роли
+            $table->foreignId('role_id')->constrained('roles'); // Внешний ключ для роли
+            $table->string('api_token')->nullable();
             $table->timestamps();          // Время создания и обновления
         });
     }
