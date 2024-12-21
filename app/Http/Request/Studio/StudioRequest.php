@@ -13,7 +13,7 @@ class StudioRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:studios,name', // Название должно быть уникальным и до 255 символов
+            'name' => 'required|string|max:32|unique:studios,name', // Название должно быть уникальным и до 255 символов
         ];
     }
     public function messages(): array
@@ -21,7 +21,7 @@ class StudioRequest extends FormRequest
         return [
             'name.required' => 'Поле "Название студии" обязательно для заполнения.',
             'name.string' => 'Название студии должно быть строкой.',
-            'name.max' => 'Название студии не может превышать 255 символов.',
+            'name.max' => 'Название студии не может превышать 32 символов.',
             'name.unique' => 'Студия с таким названием уже существует.',
         ];
     }

@@ -55,20 +55,16 @@ class CharacterController extends Controller
     public function createCharacter(CharacterStoreRequest $request)
     {
         try {
-            // Валидация запроса (не нужна повторная валидация, так как уже используется CharacterStoreRequest)
             $validatedData = $request->validated();
 
-            // Обработка аудиофайла, если он предоставлен
             $audioPath = $request->hasFile('audio')
                 ? $request->file('audio')->store('character_audio', 'public')
                 : null;
 
-            // Обработка изображения, если оно предоставлено
             $imagePath = $request->hasFile('image')
                 ? $request->file('image')->store('character_images', 'public')
                 : null;
 
-            // Создание нового персонажа
             $character = Character::create([
                 'name'        => $validatedData['name'],
                 'voice_actor' => $validatedData['voice_actor'],
@@ -78,7 +74,6 @@ class CharacterController extends Controller
                 'image_path'  => $imagePath, // Сохраняем путь к изображению
             ]);
 
-            // Формируем ответ с URL аудиофайла и изображения
             return response()->json([
                 'message' => 'Персонаж успешно создан!',
                 'character' => [
@@ -97,7 +92,6 @@ class CharacterController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            // Возвращаем ошибку, если что-то пошло не так
             return response()->json([
                 'message' => 'Произошла ошибка: ' . $e->getMessage(),
             ], 500);
@@ -112,7 +106,6 @@ class CharacterController extends Controller
             return response()->json(['message' => 'Персонаж не найден.'], 404);
         }
 
-        // Обновление данных персонажа
         $character->update($request->only(['name', 'voice_actor', 'description', 'anime_id', 'audio_path', 'image_path']));
 
         return response()->json([
@@ -123,20 +116,16 @@ class CharacterController extends Controller
 
     public function destroy($characterId)
     {
-        // Поиск персонажа по ID
         $character = Character::find($characterId);
 
-        // Если персонаж не найден
         if (!$character) {
             return response()->json([
                 'message' => 'Персонаж не найден.'
             ], 404);
         }
 
-        // Удаление персонажа
         $character->delete();
 
-        // Ответ после успешного удаления
         return response()->json([
             'message' => 'Персонаж успешно удалён.'
         ], 200);

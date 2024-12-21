@@ -26,7 +26,7 @@ class LoginRequest extends ApiRequest
             'login.exists'      => 'Пользователь с таким логином не найден.',
             'password.required' => 'Поле "Пароль" обязательно для заполнения.',
             'password.string'   => 'Поле "Пароль" должно быть строкой.',
-            'password.min'      => 'Пароль должен быть не менее :min символов.',
+            'password.min'      => 'Пароль должен быть не менее 8 символов.',
         ];
     }
 }

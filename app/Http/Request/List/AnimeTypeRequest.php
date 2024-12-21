@@ -20,7 +20,7 @@ class AnimeTypeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:anime_types,name', // Название типа должно быть уникальным
+            'name' => 'required|string|max:32|unique:anime_types,name', // Название типа должно быть уникальным
         ];
     }
 
@@ -32,7 +32,7 @@ class AnimeTypeRequest extends FormRequest
         return [
             'name.required' => 'Поле "Название типа" обязательно для заполнения.',
             'name.string' => 'Название типа должно быть строкой.',
-            'name.max' => 'Название типа не может превышать 255 символов.',
+            'name.max' => 'Название типа не может превышать 32 символов.',
             'name.unique' => 'Тип аниме с таким названием уже существует.',
         ];
     }

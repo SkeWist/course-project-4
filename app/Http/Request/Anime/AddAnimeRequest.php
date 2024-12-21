@@ -31,7 +31,7 @@ class AddAnimeRequest extends ApiRequest
         return [
             'title.required' => 'Поле "Название" обязательно для заполнения.',
             'title.string' => 'Поле "Название" должно быть строкой.',
-            'title.min' => 'Название должно содержать не менее :min символов.',
+            'title.min' => 'Название должно содержать не менее 3 символов.',
             'description.required' => 'Поле "Описание" обязательно для заполнения.',
             'studio_id.required' => 'Поле "Студия" обязательно для заполнения.',
             'studio_id.exists' => 'Выбранная студия не существует.',
@@ -43,7 +43,7 @@ class AddAnimeRequest extends ApiRequest
             'rating.numeric' => 'Поле "Рейтинг" должно быть числом.',
             'release_year.required' => 'Поле "Год выпуска" обязательно для заполнения.',
             'release_year.integer' => 'Год выпуска должен быть числом.',
-            'release_year.min' => 'Год выпуска не может быть раньше :min.',
+            'release_year.min' => 'Год выпуска не может быть раньше 1900.',
             'release_year.max' => 'Год выпуска не может быть позже текущего года.',
         ];
     }

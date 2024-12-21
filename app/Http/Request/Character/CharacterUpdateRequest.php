@@ -14,8 +14,8 @@ class CharacterUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required|string|max:255',
-            'voice_actor' => 'required|string|max:255',
+            'name'        => 'required|string|max:32',
+            'voice_actor' => 'required|string|max:32',
             'description' => 'nullable|string',
             'anime_id'    => 'required|exists:animes,id',
             'audio_path'  => 'nullable|string', // Добавлено для аудиодорожек

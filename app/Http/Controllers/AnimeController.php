@@ -58,11 +58,11 @@ class AnimeController extends Controller
                 'episode_count' => $anime->episode_count,
                 'character' => $anime->characters->map(function ($character) {
                     return [
-                        'name' => $character->name, // Имя персонажа
+                        'name' => $character->name,
                         'voice_actor' => $character->voice_actor,
-                        'description' => $character->description, // Описание персонажа, если оно есть
+                        'description' => $character->description,
                         'audio_path' => $character->audio_path,
-                        'image_url' => asset('storage/' . $character->image_url), // URL изображения персонажа
+                        'image_url' => asset('storage/' . $character->image_url),
                     ];
                 }),
             ],
@@ -89,31 +89,24 @@ class AnimeController extends Controller
     }
     public function getAnimeByYear($year)
     {
-        // Запрос на выбор аниме с указанным годом выпуска
         $animeList = Anime::where('release_year', $year)->get();
 
-        // Проверка на наличие данных
         if ($animeList->isEmpty()) {
             return response()->json(['message' => "Аниме, выпущенные в $year году, не найдены."], 404);
         }
 
-        // Преобразование данных (если требуется)
         return response()->json($animeList->map(fn($anime) => $this->transformAnime($anime)), 200);
     }
     public function deleteAnime(Request $request, $animeId)
     {
-        // Попробуем найти аниме по ID
         $anime = Anime::findOrFail($animeId);
 
-        // Удаляем изображение, если оно существует
         if ($anime->image_url && Storage::disk('public')->exists($anime->image_url)) {
             Storage::disk('public')->delete($anime->image_url);
         }
 
-        // Удаляем запись о самом аниме
         $anime->delete();
 
-        // Возвращаем успешный ответ
         return response()->json(['message' => 'Аниме успешно удалено.'], 200);
     }
     public function searchAnime(SearchAnimeRequest $request)
@@ -123,16 +116,10 @@ class AnimeController extends Controller
         $genre = $request->input('genre');
         $studio = $request->input('studio');
         $ageRating = $request->input('age_rating');
-        $animeType = $request->input('anime_type'); // передаем название типа аниме
+        $animeType = $request->input('anime_type');
 
         // Формируем запрос к базе данных
         $query = Anime::with(['studio', 'ageRating', 'animeType', 'genre']);
-
-        // Фильтрация по ключевому слову
-        if ($keyword) {
-            $query->where('title', 'LIKE', "%{$keyword}%")
-                ->orWhere('description', 'LIKE', "%{$keyword}%");
-        }
 
         // Фильтрация по жанру
         if ($genre) {
@@ -140,21 +127,18 @@ class AnimeController extends Controller
                 $q->where('name', $genre);
             });
         }
-
         // Фильтрация по студии
         if ($studio) {
             $query->whereHas('studios', function ($q) use ($studio) {
                 $q->where('name', $studio);
             });
         }
-
         // Фильтрация по возрастному рейтингу
         if ($ageRating) {
             $query->whereHas('ageRatings', function ($q) use ($ageRating) {
                 $q->where('name', $ageRating);
             });
         }
-
         // Фильтрация по типу аниме (по name)
         if ($animeType) {
             $query->whereHas('animeTypes', function ($q) use ($animeType) {
@@ -162,16 +146,12 @@ class AnimeController extends Controller
             });
         }
 
-
-        // Получаем результат
         $animeList = $query->get();
 
-        // Если ничего не найдено
         if ($animeList->isEmpty()) {
             return response()->json(['message' => 'Аниме не найдено.'], 404);
         }
 
-        // Трансформируем данные и возвращаем их
         return response()->json($animeList->map(fn($anime) => $this->transformAnime($anime)), 200);
     }
 
@@ -228,7 +208,6 @@ class AnimeController extends Controller
         if ($request->filled('age_rating')) {
             $query->whereHas('ageRatings', fn($q) => $q->where('name', $request->input('age_rating')));
         }
-        // Фильтрация по типу аниме
         if ($request->filled('anime_type')) {
             $query->whereHas('animeTypes', fn($q) => $q->where('name', $request->input('anime_type')));
         }

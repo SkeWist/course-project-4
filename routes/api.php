@@ -22,22 +22,23 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 // Пользовательские данные
 Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
 Route::middleware('auth:sanctum')->post('/user/profile', [UserController::class, 'updateProfile']);
-
+Route::prefix('user')->middleware(['auth:api', CheckRole::class . ':user'])->group(function () {
 // Аниме
-Route::get('/anime', [AnimeController::class, 'index']);
-Route::get('/anime/{animeId}', [AnimeController::class, 'show']);
-Route::get('/anime/year/{year}', [AnimeController::class, 'getAnimeByYear']);
-Route::get('/anime_types', [AnimeTypeController::class, 'index']);
-Route::get('/anime/year/{year}', [AnimeController::class, 'getAnimeByYear']);
-Route::get('/anime/search', [AnimeController::class, 'searchAnime'])->name('anime.search');
-Route::get('/anime/{id}/gallery', [AnimeController::class, 'getGalleryImages']);
-Route::get('/anime/{id}/genre', [AnimeController::class, 'getGenre']);
+    Route::get('/anime', [AnimeController::class, 'index']);
+    Route::get('/anime/{animeId}', [AnimeController::class, 'show']);
+    Route::get('/anime/year/{year}', [AnimeController::class, 'getAnimeByYear']);
+    Route::get('/anime_types', [AnimeTypeController::class, 'index']);
+    Route::get('/anime/year/{year}', [AnimeController::class, 'getAnimeByYear']);
+    Route::get('/anime/search', [AnimeController::class, 'searchAnime'])->name('anime.search');
+    Route::get('/anime/{id}/gallery', [AnimeController::class, 'getGalleryImages']);
+    Route::get('/anime/{id}/genre', [AnimeController::class, 'getGenre']);
 
+    Route::get('/gallery/{anime_id}', [GalleryController::class, 'getGalleryImages']);
 // Дополнительные ресурсы
-Route::get('/genres', [GenreController::class, 'index']);
-Route::get('/studios', [StudioController::class, 'index']);
-Route::get('/age_ratings', [AgeRatingController::class, 'index']);
-
+    Route::get('/genres', [GenreController::class, 'index']);
+    Route::get('/studios', [StudioController::class, 'index']);
+    Route::get('/age_ratings', [AgeRatingController::class, 'index']);
+});
 // Администрирование (требуется аутентификация)
 Route::prefix('admin')->middleware(['auth:api', CheckRole::class . ':admin'])->group(function () {
     // Управление аниме
@@ -46,7 +47,6 @@ Route::prefix('admin')->middleware(['auth:api', CheckRole::class . ':admin'])->g
     Route::delete('/anime/{animeId}', [AnimeController::class, 'deleteAnime']);
     // Управление Галерей
     Route::post('/gallery/{anime_id}/add', [GalleryController::class, 'addGalleryImages']);
-    Route::get('/gallery/{anime_id}', [GalleryController::class, 'getGalleryImages']);
     Route::delete('/gallery/frame/{imageId}', [GalleryController::class, 'deleteFrame']);
     // Управление персонажами
     Route::post('/character/add', [CharacterController::class, 'createCharacter']);

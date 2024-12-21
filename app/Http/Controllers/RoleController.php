@@ -6,19 +6,19 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    public function index() // Получение всех ролей
+    public function index()
     {
         $roles = Role::all();
         return response()->json($roles, 200);
     }
 
-    public function show($id) // Получение роли по ID
+    public function show($id)
     {
         $role = Role::findOrFail($id);
         return response()->json($role, 200);
     }
 
-    public function store(Request $request) // Создание новой роли
+    public function store(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:role,name',
@@ -28,7 +28,7 @@ class RoleController extends Controller
         return response()->json($role, 201);
     }
 
-    public function update(Request $request, $id) // Обновление роли
+    public function update(Request $request, $id)
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:role,name,' . $id,
@@ -39,7 +39,7 @@ class RoleController extends Controller
         return response()->json($role, 200);
     }
 
-    public function destroy($id) // Удаление роли
+    public function destroy($id)
     {
         $role = Role::findOrFail($id);
         $role->delete();

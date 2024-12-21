@@ -14,8 +14,8 @@ class CharacterStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required|string|max:255',
-            'voice_actor' => 'required|string|max:255',
+            'name'        => 'required|string|max:32',
+            'voice_actor' => 'required|string|max:32',
             'description' => 'nullable|string',
             'anime_id'    => 'required|exists:animes,id',
             'audio'       => 'nullable|mimes:mp3,wav|max:5120', // Только mp3/wav файлы до 5 МБ

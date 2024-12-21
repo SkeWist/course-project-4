@@ -14,7 +14,7 @@ class AgeRatingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:age_ratings,name', // Название должно быть уникальным и до 255 символов
+            'name' => 'required|string|max:32|unique:age_ratings,name', // Название должно быть уникальным и до 255 символов
         ];
     }
     public function messages(): array

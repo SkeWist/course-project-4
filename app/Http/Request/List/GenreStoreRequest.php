@@ -14,7 +14,7 @@ class GenreStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|unique:genres,name',
+            'name' => 'required|string|max:32|unique:genres,name',
         ];
     }
 
@@ -23,7 +23,7 @@ class GenreStoreRequest extends FormRequest
         return [
             'name.required' => 'Название жанра обязательно.',
             'name.string'   => 'Название жанра должно быть строкой.',
-            'name.max'      => 'Название жанра не должно превышать 255 символов.',
+            'name.max'      => 'Название жанра не должно превышать 32 символов.',
             'name.unique'   => 'Такой жанр уже существует.',
         ];
     }
