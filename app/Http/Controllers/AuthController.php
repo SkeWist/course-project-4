@@ -2,72 +2,115 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Request\Auth\LoginRequest;
-use App\Http\Request\Auth\RegisterRequest;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request): JsonResponse
+    // Регистрация нового пользователя
+    public function register(Request $request)
     {
-        $validated = $request->validated();
-
-        // Создаем нового пользователя
-        $user = User::create([
-            'name'     => $validated['name'],
-            'surname'  => $validated['surname'],
-            'login'    => $validated['login'],
-            'password' => Hash::make($validated['password']),
-            'role_id'  => 2,
-            'api_token' => Str::random(60), // Генерируем токен при регистрации
+        // Валидация входных данных
+        $validator = Validator::make($request->all(), [
+            'login' => 'required|string|min:6|max:32|unique:users',
+            'password' => 'required|string|min:6|max:32|confirmed',
+            'name' => 'required|string|min:3|max:50',
+            'surname' => 'required|string|min:3|max:50',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        // Создание нового пользователя
+        $user = User::create([
+            'login' => $request->login,
+            'password' => Hash::make($request->password),
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'role_id' => 2
+        ]);
+
+        // Генерация токена
+        $token = $user->createToken(Str::random(10))->plainTextToken;
+
         return response()->json([
-            'message' => 'Пользователь успешно зарегистрирован!',
-            'user'    => $user,
-            'token'   => $user->api_token,  // Возвращаем сгенерированный токен
+            'message' => 'User successfully registered',
+            'data' => [
+                'login' => $user->login,
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'role_id' => $user->role_id,
+                'updated_at' => $user->updated_at,
+                'created_at' => $user->created_at,
+                'id' => $user->id,
+            ],
+            'token' => $token
         ], 201);
     }
 
-    public function login(LoginRequest $request)
+
+    // Авторизация пользователя
+    public function login(Request $request)
     {
-        $credentials = $request->only('login', 'password');
+        // Валидация входных данных
+        $validator = Validator::make($request->all(), [
+            'login' => 'required|string',
+            'password' => 'required|string|min:6|max:32',
+        ]);
 
-        $user = User::where('login', $credentials['login'])->first();
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
 
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            // Удаляем старые токены
-            $user->tokens()->delete();
+        // Проверяем, существует ли пользователь
+        $user = User::where('login', $request->login)->first();
 
-            // Создаем новый токен
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        // Проверяем, есть ли у пользователя уже существующий токен в базе
+        $existingToken = $user->api_token;
+
+        if (!$existingToken) {
+            // Создаем новый токен и вручную сохраняем в базе
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            // Обновляем api_token в базе данных
-            $user->update(['api_token' => $token]);
-
-            return response()->json([
-                'message' => 'Успешная авторизация',
-                'token'   => $token,
-                'user'    => $user,
-            ], 200);
+            // Сохраняем токен в поле api_token таблицы users
+            $user->api_token = $token;
+            $user->save();
+        } else {
+            // Используем уже сохраненный токен
+            $token = $existingToken;
         }
 
         return response()->json([
-            'message' => 'Неверные данные'
-        ], 401);
+            'message' => 'Login successful',
+            'data' => [
+                'login' => $user->login,
+                'name' => $user->name,
+                'surname' => $user->surname,
+                'role_id' => $user->role_id,
+                'updated_at' => $user->updated_at,
+                'created_at' => $user->created_at,
+                'id' => $user->id,
+            ],
+            'token' => $token
+        ], 200);
     }
 
-    public function logout()
+    // Логаут пользователя
+    public function logout(Request $request)
     {
-        // Удаление текущего токена
-        Auth::user()->currentAccessToken()->delete();
+        $request->user()->tokens->each(function ($token) {
+            $token->delete();
+        });
 
-        return response()->json([
-            'message' => 'Выход успешен'
-        ], 200);
+        return response()->json(['message' => 'Successfully logged out']);
     }
 }
