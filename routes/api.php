@@ -1,7 +1,7 @@
+
 <?php
 
 use App\Http\Controllers\GalleryController;
-use App\Http\Controllers\RandomAnime;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 // Пользовательские данные
 Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
 Route::middleware('auth:sanctum')->post('/user/profile', [UserController::class, 'updateProfile']);
-Route::prefix('user')->middleware(['auth:api', CheckRole::class . ':user'])->group(function () {
+Route::middleware(['auth:api', CheckRole::class . ':user'])->group(function () {
 // Аниме
     Route::get('/anime', [AnimeController::class, 'index']);
     Route::get('/anime/{animeId}', [AnimeController::class, 'show']);

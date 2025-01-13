@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -22,11 +23,13 @@ class AuthController extends Controller
             'login'    => $validated['login'],
             'password' => Hash::make($validated['password']),
             'role_id'  => 2,
+            'api_token' => Str::random(60), // Генерируем токен при регистрации
         ]);
 
         return response()->json([
             'message' => 'Пользователь успешно зарегистрирован!',
-            'user'    => $user
+            'user'    => $user,
+            'token'   => $user->api_token,  // Возвращаем сгенерированный токен
         ], 201);
     }
 
@@ -37,12 +40,19 @@ class AuthController extends Controller
         $user = User::where('login', $credentials['login'])->first();
 
         if ($user && Hash::check($credentials['password'], $user->password)) {
+            // Удаляем старые токены
+            $user->tokens()->delete();
+
+            // Создаем новый токен
             $token = $user->createToken('auth_token')->plainTextToken;
+
+            // Обновляем api_token в базе данных
+            $user->update(['api_token' => $token]);
 
             return response()->json([
                 'message' => 'Успешная авторизация',
                 'token'   => $token,
-                'user'    => $user
+                'user'    => $user,
             ], 200);
         }
 
