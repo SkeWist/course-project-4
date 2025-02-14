@@ -20,9 +20,10 @@ class Anime extends Model
     /**
      * Связь с таблицей жанров (Many-to-Many).
      */
+    // В модели Anime (если один жанр на аниме)
     public function genre()
     {
-        return $this->belongsToMany(Genre::class, 'anime_genres', 'anime_id', 'genre_id');
+        return $this->belongsTo(Genre::class);
     }
 
     /**
@@ -60,6 +61,6 @@ class Anime extends Model
 
     public function galleries()
     {
-        return $this->hasMany(Gallery::class);
+        return $this->hasMany(Gallery::class, 'anime_id');
     }
 }

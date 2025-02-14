@@ -195,6 +195,18 @@ class AnimeController extends Controller
             'genre' => $anime->genre ? $anime->genre->pluck('name') : [], // Получаем жанры
         ], 200);
     }
+    public function getGalleryImages($animeId)
+    {
+        $anime = Anime::with('galleries')->find($animeId);
+
+        if (!$anime) {
+            return response()->json(['message' => 'Аниме не найдено'], 404);
+        }
+
+        $galleryImages = $anime->galleries->map(fn($image) => asset('storage/' . $image->image_path));
+
+        return response()->json(['gallery' => $galleryImages]);
+    }
     private function applyFilters($query, $request)
     {
         if ($request->filled('genre')) {
@@ -205,8 +217,8 @@ class AnimeController extends Controller
             $query->whereHas('studios', fn($q) => $q->where('name', $request->input('studio')));
         }
 
-        if ($request->filled('age_rating')) {
-            $query->whereHas('ageRatings', fn($q) => $q->where('name', $request->input('age_rating')));
+        if ($request->filled('age_rating_id')) {
+            $query->whereHas('ageRatings', fn($q) => $q->where('name', $request->input('age_rating_id')));
         }
         if ($request->filled('anime_type')) {
             $query->whereHas('animeTypes', fn($q) => $q->where('name', $request->input('anime_type')));

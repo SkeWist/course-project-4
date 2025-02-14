@@ -8,11 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Gallery extends Model
 {
     use HasFactory;
-
-    // Убедитесь, что имя таблицы указано правильно
     protected $table = 'galleries'; // Если таблица называется gallery (в единственном числе)
 
-    // Укажите поля, которые можно массово заполнять
     protected $fillable = [
         'anime_id',   // ID аниме, к которому привязано изображение
         'image_path', // Путь к изображению
