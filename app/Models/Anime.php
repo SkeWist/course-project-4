@@ -23,7 +23,7 @@ class Anime extends Model
     // В модели Anime (если один жанр на аниме)
     public function genre()
     {
-        return $this->belongsTo(Genre::class);
+        return $this->belongsToMany(Genre::class, 'anime_genres', 'anime_id', 'genre_id');
     }
 
     /**
