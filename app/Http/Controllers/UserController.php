@@ -19,22 +19,4 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
-    public function updateProfile(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'password' => 'required|string|min:6|confirmed', // Новый пароль и подтверждение обязательны
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Ошибка валидации.', 'errors' => $validator->errors()], 422);
-        }
-
-        $user = Auth::user();
-
-        $user->password = Hash::make($request->password); // Хешируем новый пароль
-
-        $user->save();
-
-        return response()->json(['message' => 'Пароль успешно обновлён.'], 200);
-    }
 }

@@ -9,14 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckRole
 {
-
     public function handle(Request $request, Closure $next, $role)
     {
-        // Получаем текущего пользователя
-        $user = auth()->user();
+        // Получаем текущего пользователя и загружаем его роль
+        $user = auth()->user()->load('role'); // Загрузка роли
 
-        // Если пользователь не аутентифицирован или роль не совпадает
-        if (!$user || $user->role->name !== $role) {
+        // Если пользователь не аутентифицирован или роль не совпадает с role_id = 1
+        if (!$user || $user->role->id !== 1) {  // Используем role->id для проверки
             return response()->json(['message' => 'Forbidden'], 403);
         }
 

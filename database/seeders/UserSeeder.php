@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -16,31 +17,34 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        // Создаём пользователей через Eloquent
         $users = [
             [
                 'name' => 'Admin',
                 'surname' => 'User',
                 'login' => 'admin',
-                'password' => Hash::make('password123'), // Зашифрованный пароль
+                'password' => Hash::make('password123'), // Хешируем пароль
                 'role_id' => 1, // Роль администратора
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
                 'name' => 'Regular',
                 'surname' => 'User',
                 'login' => 'user',
-                'password' => Hash::make('password123'), // Зашифрованный пароль
+                'password' => Hash::make('password123'), // Хешируем пароль
                 'role_id' => 2, // Роль обычного пользователя
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
         ];
 
-        foreach ($users as &$user) {
-            $user['api_token'] = Str::random(60); // Генерация токена для каждого пользователя
-        }
+        foreach ($users as $userData) {
+            // Создаём пользователя
+            $user = User::create($userData);
 
-        DB::table('users')->insert($users);
+            // Генерируем Sanctum-токен
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            // Сохраняем токен в api_token
+            $user->api_token = $token;
+            $user->save();
+        }
     }
 }

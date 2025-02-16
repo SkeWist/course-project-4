@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Http\Controllers\AnimeGenreController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Middleware\CheckRole;
 use Illuminate\Http\Request;
@@ -22,15 +23,15 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 // Пользовательские данные
 Route::middleware('auth:api')->get('/user', [UserController::class, 'getUser']);
 Route::middleware('auth:sanctum')->post('/user/profile', [UserController::class, 'updateProfile']);
+Route::get('/anime', [AnimeController::class, 'index']);
+Route::get('/anime/{id}/gallery', [AnimeController::class, 'getGalleryImages']);
 Route::middleware(['auth:api', CheckRole::class . ':user'])->group(function () {
 // Аниме
-    Route::get('/anime', [AnimeController::class, 'index']);
     Route::get('/anime/{animeId}', [AnimeController::class, 'show']);
     Route::get('/anime/year/{year}', [AnimeController::class, 'getAnimeByYear']);
     Route::get('/anime_types', [AnimeTypeController::class, 'index']);
     Route::get('/anime/year/{year}', [AnimeController::class, 'getAnimeByYear']);
     Route::get('/anime/search', [AnimeController::class, 'searchAnime'])->name('anime.search');
-    Route::get('/anime/{id}/gallery', [AnimeController::class, 'getGalleryImages']);
     Route::get('/anime/{id}/genre', [AnimeController::class, 'getGenre']);
 
     Route::get('/gallery/{anime_id}', [GalleryController::class, 'getGalleryImages']);
@@ -40,11 +41,12 @@ Route::middleware(['auth:api', CheckRole::class . ':user'])->group(function () {
     Route::get('/age_ratings', [AgeRatingController::class, 'index']);
 });
 // Администрирование (требуется аутентификация)
-Route::prefix('admin')->middleware(['auth:api', CheckRole::class . ':admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth:sanctum', CheckRole::class . ':admin'])->group(function () {
     // Управление аниме
     Route::post('/anime', [AnimeController::class, 'addAnime']);
     Route::post('/anime/{animeId}', [AnimeController::class, 'editAnime']);
     Route::delete('/anime/{animeId}', [AnimeController::class, 'deleteAnime']);
+    Route::post('admin/anime-genres', [AnimeGenreController::class, 'store']);
     // Управление Галерей
     Route::post('/gallery/{anime_id}/add', [GalleryController::class, 'addGalleryImages']);
     Route::delete('/gallery/frame/{imageId}', [GalleryController::class, 'deleteFrame']);

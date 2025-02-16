@@ -155,7 +155,6 @@ class AnimeController extends Controller
         return response()->json($animeList->map(fn($anime) => $this->transformAnime($anime)), 200);
     }
 
-
     public function addAnime(AddAnimeRequest $request)
     {
         $imagePath = $request->hasFile('image')
