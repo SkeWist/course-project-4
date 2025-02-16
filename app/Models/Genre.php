@@ -11,8 +11,11 @@ class Genre extends Model
     protected $table = 'genres';
     protected $fillable = ['name'];
 
-    public function anime()
+    public function animes()
     {
         return $this->belongsToMany(Anime::class, 'anime_genre', 'genre_id', 'anime_id');
+    }
+    public function animeGenres(){
+        return $this->hasMany(AnimeGenre::class);
     }
 }

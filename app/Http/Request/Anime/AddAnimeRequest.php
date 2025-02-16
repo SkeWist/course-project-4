@@ -23,6 +23,8 @@ class AddAnimeRequest extends ApiRequest
             'rating' => 'required|numeric|min:0|max:10',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'release_year' => 'required|integer|min:1900|max:' . date('Y'),
+            'genre_ids' => 'required|array',
+            'genre_ids.*' => 'integer|exists:genres,id',
         ];
     }
 
@@ -45,6 +47,9 @@ class AddAnimeRequest extends ApiRequest
             'release_year.integer' => 'Год выпуска должен быть числом.',
             'release_year.min' => 'Год выпуска не может быть раньше 1900.',
             'release_year.max' => 'Год выпуска не может быть позже текущего года.',
+            'genre_ids.required' => 'Поле "Жанры" обязательно для заполнения.',
+            'genre_ids.array' => 'Жанры должны быть переданы в виде массива.',
+            'genre_ids.*.exists' => 'Один или несколько жанров не существуют в базе данных.'
         ];
     }
 }

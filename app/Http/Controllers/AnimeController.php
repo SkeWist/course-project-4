@@ -10,6 +10,7 @@ use App\Http\Request\Anime\ShowAnimeRequest;
 use App\Http\Request\Anime\UpdateAnimeRequest;
 use App\Http\Requests\SearchAnimeRequest;
 use App\Http\Controllers\AuthController;
+use App\Http\Resources\AnimeResource;
 use App\Models\Anime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -161,9 +162,22 @@ class AnimeController extends Controller
             ? $request->file('image')->store('anime_images', 'public')
             : null;
 
-        $anime = Anime::create(array_merge($request->validated(), ['image_url' => $imagePath]));
-
-        return response()->json(['message' => 'Аниме успешно добавлено!', 'anime_id' => $anime->id], 201);
+        $anime = Anime::create([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'studio_id' => $request->input('studio_id'),
+            'age_rating_id' => $request->input('age_rating_id'),
+            'anime_type_id' => $request->input('anime_type_id'),
+            'episode_count' => $request->input('episode_count'),
+            'rating' => $request->input('rating'),
+            'image_url' => $imagePath,
+            'release_year' => $request->input('release_year'),
+        ]);
+        $anime->save();
+        if ($request->has('genres_ids')) {
+            $genresIds = $request->input('genres_ids');
+            $anime->genres()->sync($genresIds);}
+        return new AnimeResource($anime->load('genres'));
     }
     public function editAnime(UpdateAnimeRequest $request, $animeId)
     {

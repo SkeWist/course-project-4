@@ -21,14 +21,16 @@ class Anime extends Model
      * Связь с таблицей жанров (Many-to-Many).
      */
     // В модели Anime (если один жанр на аниме)
-    public function genre()
+    public function genres()
     {
         return $this->belongsToMany(Genre::class, 'anime_genres', 'anime_id', 'genre_id');
     }
 
-    /**
-     * Связь с таблицей студий (One-to-Many).
-     */
+    public function animeGenres()
+    {
+        return $this->hasMany(AnimeGenre::class);
+    }
+
     public function studio()
     {
         return $this->belongsTo(Studio::class);  // Убедитесь, что Studio имеет правильное имя таблицы
