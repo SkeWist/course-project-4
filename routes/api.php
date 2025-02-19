@@ -46,7 +46,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', CheckRole::class . ':admin']
     Route::post('/anime', [AnimeController::class, 'addAnime']);
     Route::post('/anime/{animeId}', [AnimeController::class, 'editAnime']);
     Route::delete('/anime/{animeId}', [AnimeController::class, 'deleteAnime']);
-    Route::post('admin/anime-genres', [AnimeGenreController::class, 'store']);
+    Route::post('/anime_genres', [AnimeGenreController::class, 'store']);
     // Управление Галерей
     Route::post('/gallery/{anime_id}/add', [GalleryController::class, 'addGalleryImages']);
     Route::delete('/gallery/frame/{imageId}', [GalleryController::class, 'deleteFrame']);

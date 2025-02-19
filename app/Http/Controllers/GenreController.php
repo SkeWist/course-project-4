@@ -6,6 +6,7 @@ use App\Http\Requests\GenreStoreRequest;
 use App\Models\Gallery;
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class GenreController extends Controller
@@ -70,19 +71,16 @@ class GenreController extends Controller
     }
     public function deleteGenre($id)
     {
-        $genre = Genre::find($id);
+        Log::info("Попытка удаления жанра с ID: " . $id);
 
+        $genre = Genre::find($id);
         if (!$genre) {
-            return response()->json([
-                'message' => 'Жанр не найден.',
-            ], 404);
+            Log::error("Жанр с ID $id не найден!");
+            return response()->json(['message' => 'Жанр не найден.'], 404);
         }
 
         $genre->delete();
-
-        return response()->json([
-            'message' => 'Жанр успешно удалён.',
-        ], 200);
+        return response()->json(['message' => 'Жанр успешно удалён.'], 200);
     }
 
 }
